@@ -54,6 +54,17 @@ class App extends React.Component {
     });
   };
 
+  resetQuiz = () => {
+    this.setState(state => {
+      state.choices = {};
+      state.score = {
+        correct: 0,
+        wrong: 0,
+        total: 0
+      };
+    });
+  };
+
   render() {
     return (
       <div className="app container">
@@ -95,7 +106,9 @@ class App extends React.Component {
             <Route
               exact
               path="/result"
-              render={() => <Result result={this.state.score} />}
+              render={() => (
+                <Result result={this.state.score} resetQuiz={this.resetQuiz} />
+              )}
             />
             <Route component={Error404} />
           </Switch>

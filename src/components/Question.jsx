@@ -11,6 +11,7 @@ class Question extends React.Component {
       checked: [],
       submitted: false,
       success: false,
+      missingChoice: false,
       last: false
     };
   }
@@ -24,6 +25,8 @@ class Question extends React.Component {
   }
 
   codeHighlight = () => {
+    /* only redo highlighting on initial load of the component and when the props
+       change for a new question to be displayed */
     if (
       this.props.question.hasOwnProperty("code") &&
       this.state.checked.length === 0 &&
@@ -58,12 +61,15 @@ class Question extends React.Component {
 
   submit = event => {
     event.preventDefault();
+
+    if (this.state.checked.length === 0) {
+      return this.setState({ missingChoice: true });
+    }
+
     this.setState({ submitted: true });
     this.props.saveChoices(this.props.id, this.state.checked);
 
-    const solutions = this.props.question.solutions;
-    solutions.sort();
-
+    const solutions = this.props.question.solutions.sort();
     const checked = [...this.state.checked].sort();
 
     if (solutions.length !== checked.length) {
@@ -87,16 +93,20 @@ class Question extends React.Component {
     event.preventDefault();
     const next = this.props.getNextQuestion(this.props.id);
 
+    this.resetState();
+    this.props.history.push(`/q/${next.uuid}`);
+  };
+
+  resetState = () => {
     this.setState(state => {
       state.submitted = false;
       state.disabled = false;
       state.success = false;
+      state.missingChoice = false;
       state.checked = [];
 
       return state;
     });
-
-    this.props.history.push(`/q/${next.uuid}`);
   };
 
   render() {
@@ -115,19 +125,28 @@ class Question extends React.Component {
           </div>
         </div>
 
-        {this.state.submitted &&
-          this.state.success && (
-            <div className="alert alert-success">
-              <strong>Great!</strong> Your answer is correct!
-            </div>
-          )}
+        {this.state.missingChoice && (
+          <div className="alert alert-info">
+            <strong>Hey!</strong> Didn't you forget something? Please select at
+            least one answer.
+          </div>
+        )}
 
-        {this.state.submitted &&
-          !this.state.success && (
-            <div className="alert alert-danger">
-              <strong>Sorry!</strong> You didn't choose the right answers!
-            </div>
-          )}
+        {this.state.submitted && (
+          <Fragment>
+            {this.state.success && (
+              <div className="alert alert-success">
+                <strong>Great:</strong> That's exactly what we've asked for!
+              </div>
+            )}
+
+            {this.state.submitted && (
+              <div className="alert alert-danger">
+                <strong>Sorry:</strong> You should try again later!
+              </div>
+            )}
+          </Fragment>
+        )}
 
         <h2>{question.question}</h2>
 

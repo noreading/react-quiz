@@ -1,6 +1,12 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
 class Result extends React.Component {
+  restart = () => {
+    this.props.resetQuiz();
+    this.props.history.push("/");
+  };
+
   render() {
     return (
       <div className="result">
@@ -17,9 +23,15 @@ class Result extends React.Component {
         <div className="alert alert-danger">
           You had <strong>{this.props.result.wrong}</strong> wrong answers.
         </div>
+
+        <p>
+          <button className="btn btn-secondary" onClick={this.restart}>
+            <i className="fa fa-refresh" /> Restart the quiz
+          </button>
+        </p>
       </div>
     );
   }
 }
 
-export default Result;
+export default withRouter(Result);

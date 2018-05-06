@@ -6307,7 +6307,14 @@ header.header {
 
 .answers {
   margin: 1rem 0; }
-  .answers .correct {
-    color: #009900 !important; }
-  .answers .wrong {
-    color: #aa0000 !important; }
+  .answers .answer {
+    padding-left: 0.25rem; }
+    .answers .answer:hover {
+      background-color: #efefef; }
+    .answers .answer .form-check-label {
+      display: block;
+      cursor: pointer; }
+    .answers .answer .correct {
+      color: #009900 !important; }
+    .answers .answer .wrong {
+      color: #aa0000 !important; }

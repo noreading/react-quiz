@@ -36,11 +36,24 @@ header.header {
 .answers {
   margin: 1rem 0;
 
-  .correct {
-    color: #009900 !important;
-  }
+  .answer {
+    padding-left: 0.25rem;
 
-  .wrong {
-    color: #aa0000 !important;
+    &:hover {
+      background-color: #efefef;
+    }
+
+    .form-check-label {
+      display: block;
+      cursor: pointer;
+    }
+
+    .correct {
+      color: #009900 !important;
+    }
+
+    .wrong {
+      color: #aa0000 !important;
+    }
   }
 }
