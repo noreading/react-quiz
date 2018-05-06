@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 import Answer from "./Answer";
 import Prism from "prismjs";
@@ -16,8 +16,22 @@ class Question extends React.Component {
   }
 
   componentDidMount() {
-    Prism.highlightAll();
+    this.codeHighlight();
   }
+
+  componentDidUpdate() {
+    this.codeHighlight();
+  }
+
+  codeHighlight = () => {
+    if (
+      this.props.question.hasOwnProperty("code") &&
+      this.state.checked.length === 0 &&
+      this.state.submitted === false
+    ) {
+      Prism.highlightAll();
+    }
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const lastQuestion = nextProps.getLastQuestion();
@@ -30,8 +44,10 @@ class Question extends React.Component {
     index = parseInt(index, 10);
 
     this.setState(state => {
-      if (state.checked.indexOf(index) !== -1) {
-        state.checked.splice(index, 1);
+      const stateIndex = state.checked.indexOf(index);
+
+      if (stateIndex !== -1) {
+        state.checked.splice(stateIndex, 1);
       } else {
         state.checked.push(parseInt(index, 10));
       }
@@ -42,6 +58,7 @@ class Question extends React.Component {
 
   submit = event => {
     event.preventDefault();
+    this.setState({ submitted: true });
 
     const solutions = this.props.question.solutions;
     solutions.sort();
@@ -50,33 +67,19 @@ class Question extends React.Component {
 
     if (solutions.length !== checked.length) {
       this.props.updateScore(false);
-
-      return this.setState(state => {
-        state.submitted = true;
-        state.success = false;
-        return state;
-      });
+      return this.setState({ success: false });
     }
 
     for (let i = 0; i < checked.length; i++) {
       if (!solutions.includes(checked[i])) {
         this.props.updateScore(false);
-
-        return this.setState(state => {
-          state.submitted = true;
-          state.success = false;
-          return state;
-        });
+        return this.setState({ success: false });
       }
     }
 
     this.props.updateScore(true);
 
-    return this.setState(state => {
-      state.submitted = true;
-      state.success = true;
-      return state;
-    });
+    return this.setState({ success: true });
   };
 
   nextQuestion = event => {
@@ -128,15 +131,19 @@ class Question extends React.Component {
         <h2>{question.question}</h2>
 
         {question.hasOwnProperty("code") && (
-          <pre
-            className={
-              question.hasOwnProperty("language")
-                ? `language-${question.language}`
-                : ""
-            }
-          >
-            <code>{question.code}</code>
-          </pre>
+          <Fragment>
+            <pre
+              className={
+                question.hasOwnProperty("language")
+                  ? `language-${question.language}`
+                  : ""
+              }
+            >
+              <code>{question.code}</code>
+            </pre>
+
+            <h2>Answers</h2>
+          </Fragment>
         )}
 
         <div className="answers">

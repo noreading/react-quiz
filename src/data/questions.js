@@ -1,7 +1,7 @@
 export default {
   "824ec22a-1056-484d-8a1c-fd2580019ea3": {
     uuid: "824ec22a-1056-484d-8a1c-fd2580019ea3",
-    question: "What does the following code do?",
+    question: "What is the result of the following code?",
     code:
       "var array = [1,2,3,4,5,6];\r\n\r\nfor (var i = 1; i < array.length; i+=2) {\r\n  console.log(array[i])\r\n}",
     language: "javascript",
