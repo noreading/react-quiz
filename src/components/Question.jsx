@@ -59,6 +59,7 @@ class Question extends React.Component {
   submit = event => {
     event.preventDefault();
     this.setState({ submitted: true });
+    this.props.saveChoices(this.props.id, this.state.checked);
 
     const solutions = this.props.question.solutions;
     solutions.sort();
@@ -156,21 +157,28 @@ class Question extends React.Component {
                 index={index}
                 text={question.answers[index].text}
                 key={index}
-                checked={this.state.checked.indexOf(index) !== -1}
-                disabled={this.state.submitted}
+                checked={
+                  this.state.checked.includes(index) ||
+                  this.props.choices.includes(index)
+                }
+                disabled={
+                  this.state.submitted === true ||
+                  this.props.choices.length !== 0
+                }
                 toggleChecked={this.toggleChecked}
               />
             );
           })}
         </div>
 
-        {this.state.submitted === false && (
-          <button className="btn btn-primary" onClick={this.submit}>
-            Submit&nbsp; <i className="fa fa-arrow-right" />
-          </button>
-        )}
+        {this.state.submitted === false &&
+          this.props.choices.length === 0 && (
+            <button className="btn btn-primary" onClick={this.submit}>
+              Submit&nbsp; <i className="fa fa-arrow-right" />
+            </button>
+          )}
 
-        {this.state.submitted === true &&
+        {(this.state.submitted === true || this.props.choices.length !== 0) &&
           this.state.last === false && (
             <button className="btn btn-primary" onClick={this.nextQuestion}>
               Next question&nbsp; <i className="fa fa-arrow-right" />

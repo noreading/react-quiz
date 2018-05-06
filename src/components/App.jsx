@@ -13,6 +13,7 @@ class App extends React.Component {
 
     this.state = {
       questions,
+      choices: {},
       score: {
         correct: 0,
         wrong: 0,
@@ -47,6 +48,12 @@ class App extends React.Component {
     });
   };
 
+  saveChoices = (questionId, choices) => {
+    this.setState(state => {
+      state.choices[questionId] = choices;
+    });
+  };
+
   render() {
     return (
       <div className="app container">
@@ -69,16 +76,18 @@ class App extends React.Component {
                 const questionId = request.match.params.id;
                 return (
                   <Question
-                    id={request.match.params.id}
+                    id={questionId}
                     question={this.state.questions[questionId]}
                     count={
                       Object.keys(this.state.questions).indexOf(questionId) + 1
                     }
                     total={Object.keys(this.state.questions).length}
                     score={this.state.score.total}
+                    choices={this.state.choices[questionId] || []}
                     getNextQuestion={this.getNextQuestion}
                     getLastQuestion={this.getLastQuestion}
                     updateScore={this.updateScore}
+                    saveChoices={this.saveChoices}
                   />
                 );
               }}
