@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./Home";
+import QuestionHeader from "./QuestionHeader";
 import Question from "./Question";
 import Error404 from "./Error404";
 import Result from "./Result";
@@ -86,20 +87,25 @@ class App extends React.Component {
               render={request => {
                 const questionId = request.match.params.id;
                 return (
-                  <Question
-                    id={questionId}
-                    question={this.state.questions[questionId]}
-                    count={
-                      Object.keys(this.state.questions).indexOf(questionId) + 1
-                    }
-                    total={Object.keys(this.state.questions).length}
-                    score={this.state.score.total}
-                    choices={this.state.choices[questionId] || []}
-                    getNextQuestion={this.getNextQuestion}
-                    getLastQuestion={this.getLastQuestion}
-                    updateScore={this.updateScore}
-                    saveChoices={this.saveChoices}
-                  />
+                  <Fragment>
+                    <QuestionHeader
+                      count={
+                        Object.keys(this.state.questions).indexOf(questionId) +
+                        1
+                      }
+                      total={Object.keys(this.state.questions).length}
+                      score={this.state.score.total}
+                    />
+                    <Question
+                      id={questionId}
+                      question={this.state.questions[questionId]}
+                      choices={this.state.choices[questionId] || []}
+                      getNextQuestion={this.getNextQuestion}
+                      getLastQuestion={this.getLastQuestion}
+                      updateScore={this.updateScore}
+                      saveChoices={this.saveChoices}
+                    />
+                  </Fragment>
                 );
               }}
             />

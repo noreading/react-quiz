@@ -66,27 +66,37 @@ class Question extends React.Component {
       return this.setState({ missingChoice: true });
     }
 
+    if (this.state.missingChoice === true) {
+      this.setState({ missingChoice: false });
+    }
+
     this.setState({ submitted: true });
     this.props.saveChoices(this.props.id, this.state.checked);
 
+    if (this.isValid()) {
+      this.props.updateScore(true);
+      this.setState({ success: true });
+    } else {
+      this.props.updateScore(false);
+      this.setState({ success: false });
+    }
+  };
+
+  isValid = () => {
     const solutions = this.props.question.solutions.sort();
     const checked = [...this.state.checked].sort();
 
     if (solutions.length !== checked.length) {
-      this.props.updateScore(false);
-      return this.setState({ success: false });
+      return false;
     }
 
     for (let i = 0; i < checked.length; i++) {
       if (!solutions.includes(checked[i])) {
-        this.props.updateScore(false);
-        return this.setState({ success: false });
+        return false;
       }
     }
 
-    this.props.updateScore(true);
-
-    return this.setState({ success: true });
+    return true;
   };
 
   nextQuestion = event => {
@@ -114,17 +124,6 @@ class Question extends React.Component {
 
     return (
       <div className="question">
-        <div className="question-header">
-          <div className="row">
-            <div className="col col-lg-6">
-              Question {this.props.count} / {this.props.total}
-            </div>
-            <div className="col col-lg-6 text-right">
-              Score: &nbsp; {this.props.score}
-            </div>
-          </div>
-        </div>
-
         {this.state.missingChoice && (
           <div className="alert alert-info">
             <strong>Hey!</strong> Didn't you forget something? Please select at
@@ -134,13 +133,13 @@ class Question extends React.Component {
 
         {this.state.submitted && (
           <Fragment>
-            {this.state.success && (
+            {this.state.success === true && (
               <div className="alert alert-success">
                 <strong>Great:</strong> That's exactly what we've asked for!
               </div>
             )}
 
-            {this.state.submitted && (
+            {this.state.success === false && (
               <div className="alert alert-danger">
                 <strong>Sorry:</strong> You should try again later!
               </div>
