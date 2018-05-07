@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./Home";
-import QuestionHeader from "./QuestionHeader";
+import StatusBar from "./StatusBar";
 import Question from "./Question";
 import Error404 from "./Error404";
 import Result from "./Result";
@@ -88,7 +88,7 @@ class App extends React.Component {
                 const questionId = request.match.params.id;
                 return (
                   <Fragment>
-                    <QuestionHeader
+                    <StatusBar
                       count={
                         Object.keys(this.state.questions).indexOf(questionId) +
                         1

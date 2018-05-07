@@ -1,6 +1,6 @@
 import React from "react";
 
-class QuestionHeader extends React.Component {
+class StatusBar extends React.Component {
   render() {
     return (
       <div className="question-header">
@@ -17,4 +17,4 @@ class QuestionHeader extends React.Component {
   }
 }
 
-export default QuestionHeader;
+export default StatusBar;

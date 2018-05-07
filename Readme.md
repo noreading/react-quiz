@@ -6,4 +6,4 @@ This is a small quiz build with React that shows some of the basic features of R
 
 ## The component schema
 
-![The component schema](./docs/component-schema.jpg)
+![The component schema](./docs/component-schema.png)
