@@ -24,16 +24,24 @@ class App extends React.Component {
   }
 
   getNextQuestion = currentId => {
-    const currentIndex = Object.keys(this.state.questions).indexOf(currentId);
+    const keys = Object.keys(this.state.questions);
+    const currentIndex = keys.indexOf(currentId);
     const nextIndex = currentIndex + 1;
-    const nextId = Object.keys(this.state.questions)[nextIndex];
+    const nextId = keys[nextIndex];
 
     return this.state.questions[nextId];
   };
 
+  getFirstQuestion = () => {
+    const questionId = Object.keys(this.state.questions)[0];
+    return this.state.questions[questionId];
+  };
+
   getLastQuestion = () => {
     const keys = Object.keys(this.state.questions);
-    return this.state.questions[keys[keys.length - 1]];
+    const lastKey = keys[keys.length - 1];
+
+    return this.state.questions[lastKey];
   };
 
   updateScore = success => {
@@ -80,7 +88,7 @@ class App extends React.Component {
             <Route
               exact
               path="/"
-              render={() => <Home questions={this.state.questions} />}
+              render={() => <Home getFirstQuestion={this.getFirstQuestion} />}
             />
             <Route
               path="/q/:id"

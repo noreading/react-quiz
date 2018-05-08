@@ -4,11 +4,7 @@ import { withRouter } from "react-router-dom";
 class Home extends React.Component {
   start = event => {
     event.preventDefault();
-    this.props.history.push(`/q/${this.getFirstQuestionId()}`);
-  };
-
-  getFirstQuestionId = () => {
-    return Object.keys(this.props.questions)[0];
+    this.props.history.push(`/q/${this.props.getFirstQuestion().uuid}`);
   };
 
   render() {

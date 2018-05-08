@@ -52,7 +52,7 @@ class Question extends React.Component {
       if (stateIndex !== -1) {
         state.checked.splice(stateIndex, 1);
       } else {
-        state.checked.push(parseInt(index, 10));
+        state.checked.push(index);
       }
 
       return state;
@@ -166,14 +166,12 @@ class Question extends React.Component {
         )}
 
         <div className="answers">
-          {Object.keys(question.answers).map(index => {
-            index = parseInt(index, 10);
-
+          {question.answers.map((answer, index) => {
             return (
               <Answer
                 question={question}
                 index={index}
-                text={question.answers[index].text}
+                text={answer.text}
                 key={index}
                 checked={
                   this.state.checked.includes(index) ||
