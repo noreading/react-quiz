@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 class Answer extends React.Component {
   toggleChecked = () => {
@@ -12,18 +12,18 @@ class Answer extends React.Component {
     let validationClass = "";
 
     if (this.props.disabled) {
-      if (isValid === false) {
-        validationClass = "wrong";
-      } else {
+      if (isValid) {
         validationClass = "correct";
+      } else if (this.props.success === false) {
+        validationClass = "wrong";
       }
     }
 
     return (
       <div className="answer">
-        <div className="form-check">
+        <div className={`custom-control custom-checkbox ${validationClass}`}>
           <input
-            className="form-check-input"
+            className="custom-control-input"
             type="checkbox"
             value={id}
             id={id}
@@ -31,8 +31,20 @@ class Answer extends React.Component {
             onChange={this.toggleChecked}
             checked={this.props.checked}
           />
-          <label className={`form-check-label ${validationClass}`} htmlFor={id}>
-            {this.props.text}
+          <label className="custom-control-label" htmlFor={id}>
+            {this.props.question.language && !this.props.question.code ? (
+              <pre
+                className={
+                  this.props.question.hasOwnProperty("language")
+                    ? `language-${this.props.question.language}`
+                    : ""
+                }
+              >
+                <code>{this.props.text}</code>
+              </pre>
+            ) : (
+              <Fragment>{this.props.text}</Fragment>
+            )}
           </label>
         </div>
       </div>

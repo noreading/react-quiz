@@ -28,7 +28,7 @@ class Question extends React.Component {
     /* only redo highlighting on initial load of the component and when the props
        change for a new question to be displayed */
     if (
-      this.props.question.hasOwnProperty("code") &&
+      this.props.question.hasOwnProperty("language") &&
       this.state.checked.length === 0 &&
       this.state.submitted === false
     ) {
@@ -76,6 +76,16 @@ class Question extends React.Component {
     if (this.isValid()) {
       this.props.updateScore(true);
       this.setState({ success: true });
+
+      if (this.state.last === false) {
+        setTimeout(() => {
+          this.nextQuestion();
+        }, 450);
+      } else {
+        setTimeout(() => {
+          this.props.history.push("/result");
+        }, 450);
+      }
     } else {
       this.props.updateScore(false);
       this.setState({ success: false });
@@ -100,7 +110,10 @@ class Question extends React.Component {
   };
 
   nextQuestion = event => {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
+
     const next = this.props.getNextQuestion(this.props.id);
 
     this.resetState();
@@ -129,22 +142,6 @@ class Question extends React.Component {
             <strong>Hey!</strong> Didn't you forget something? Please select at
             least one answer.
           </div>
-        )}
-
-        {this.state.submitted && (
-          <Fragment>
-            {this.state.success === true && (
-              <div className="alert alert-success">
-                <strong>Great:</strong> That's exactly what we've asked for!
-              </div>
-            )}
-
-            {this.state.success === false && (
-              <div className="alert alert-danger">
-                <strong>Sorry:</strong> You should try again later!
-              </div>
-            )}
-          </Fragment>
         )}
 
         <h2>{question.question}</h2>
@@ -181,6 +178,7 @@ class Question extends React.Component {
                   this.state.submitted === true ||
                   this.props.choices.length !== 0
                 }
+                success={this.state.success}
                 toggleChecked={this.toggleChecked}
               />
             );
@@ -190,11 +188,12 @@ class Question extends React.Component {
         {this.state.submitted === false &&
           this.props.choices.length === 0 && (
             <button className="btn btn-primary" onClick={this.submit}>
-              Submit&nbsp; <i className="fa fa-arrow-right" />
+              <i className="fa fa-check" />&nbsp;Submit
             </button>
           )}
 
         {(this.state.submitted === true || this.props.choices.length !== 0) &&
+          this.state.success === false &&
           this.state.last === false && (
             <button className="btn btn-primary" onClick={this.nextQuestion}>
               Next question&nbsp; <i className="fa fa-arrow-right" />
@@ -202,6 +201,7 @@ class Question extends React.Component {
           )}
 
         {this.state.submitted === true &&
+          this.state.success === false &&
           this.state.last === true && (
             <Link to="/result" className="btn btn-primary">
               Final Result&nbsp; <i className="fa fa-arrow-right" />

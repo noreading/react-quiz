@@ -6308,13 +6308,19 @@ header.header {
 .answers {
   margin: 1rem 0; }
   .answers .answer {
-    padding-left: 0.25rem; }
+    padding: 0.25rem 0 0.25rem 0.25rem; }
     .answers .answer:hover {
       background-color: #efefef; }
-    .answers .answer .form-check-label {
+    .answers .answer .custom-checkbox {
+      padding-left: 1.75rem; }
+    .answers .answer pre {
+      padding: 0.5rem; }
+    .answers .answer .custom-control-label {
       display: block;
       cursor: pointer; }
-    .answers .answer .correct {
-      color: #009900 !important; }
-    .answers .answer .wrong {
-      color: #aa0000 !important; }
+    .answers .answer .correct label,
+    .answers .answer .correct pre {
+      background: #d4edda !important; }
+    .answers .answer .wrong label,
+    .answers .answer .wrong pre {
+      background: #f8d7da !important; }
