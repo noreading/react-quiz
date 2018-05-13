@@ -12,9 +12,9 @@ class Home extends React.Component {
       <Fragment>
         <div>
           <p>
-            This is a tiny quiz about HTML, CSS and JavaScript, that is used to
+            This is a quiz about HTML, CSS and JavaScript, that can be used to
             repeat all the basics that are needed in everday's life of a web
-            developer. Send questions or found bugs to&nbsp;
+            developer. Send questions or bugs to&nbsp;
             <a href="mailto:questions@dominik-hanke.de">
               questions@dominik-hanke.de
             </a>.
